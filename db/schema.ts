@@ -15,3 +15,14 @@ export const workouts = sqliteTable("workouts", {
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const profiles = sqliteTable("profiles", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  profileKey: text("profile_key").notNull().unique().default("primary"),
+  name: text("name").notNull(),
+  level: text("level").notNull().default("Intermediate"),
+  goal: text("goal").notNull().default("Build strength"),
+  units: text("units").notNull().default("lb"),
+  weeklyDays: integer("weekly_days").notNull().default(4),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
