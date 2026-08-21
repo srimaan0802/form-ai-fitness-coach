@@ -15,6 +15,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "FORM AI — Your Intelligent Fitness Coach",
   description: "Track workouts, reps, sets and weights with adaptive AI coaching.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "FORM AI", statusBarStyle: "black-translucent" },
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
