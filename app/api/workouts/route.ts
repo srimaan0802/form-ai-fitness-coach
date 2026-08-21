@@ -24,7 +24,7 @@ export async function GET() {
   try {
     await ready();
     const current = await env.DB.prepare("SELECT * FROM workouts WHERE workout_key = ?").bind("current").first();
-    const history = await env.DB.prepare("SELECT id, name, muscle_group, completed_sets, total_sets, volume, workout_date, updated_at FROM workouts WHERE status = ? ORDER BY workout_date DESC, id DESC LIMIT 20").bind("completed").all();
+    const history = await env.DB.prepare("SELECT id, name, muscle_group, exercises, completed_sets, total_sets, volume, workout_date, updated_at FROM workouts WHERE status = ? ORDER BY workout_date DESC, id DESC LIMIT 20").bind("completed").all();
     return Response.json({ current, history: history.results });
   } catch (error) { return Response.json({ error: error instanceof Error ? error.message : "Could not load workouts" }, { status: 500 }); }
 }
@@ -52,4 +52,16 @@ export async function POST(request: Request) {
       .bind(`finished-${now.getTime()}`, "Lower body strength", "Legs", JSON.stringify(body.exercises), "completed", body.completedSets || 0, body.totalSets || 0, body.volume || 0, now.toISOString().slice(0,10)).run();
     return Response.json({ saved: true }, { status: 201 });
   } catch (error) { return Response.json({ error: error instanceof Error ? error.message : "Could not finish workout" }, { status: 500 }); }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    await ready();
+    const body = await request.json() as { id: number; exercises: unknown; completedSets: number; totalSets: number; volume: number; };
+    if (!body.id || !Array.isArray(body.exercises)) return Response.json({ error: "Workout and exercises are required" }, { status: 400 });
+    const result = await env.DB.prepare("UPDATE workouts SET exercises = ?, completed_sets = ?, total_sets = ?, volume = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND status = ?")
+      .bind(JSON.stringify(body.exercises), body.completedSets || 0, body.totalSets || 0, body.volume || 0, body.id, "completed").run();
+    if (!result.meta.changes) return Response.json({ error: "Saved workout not found" }, { status: 404 });
+    return Response.json({ saved: true, savedAt: new Date().toISOString() });
+  } catch (error) { return Response.json({ error: error instanceof Error ? error.message : "Could not update workout" }, { status: 500 }); }
 }
