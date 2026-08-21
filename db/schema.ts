@@ -14,6 +14,7 @@ export const workouts = sqliteTable("workouts", {
   workoutDate: text("workout_date").notNull(),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  profileId: integer("profile_id").notNull().default(1),
 });
 
 export const profiles = sqliteTable("profiles", {
@@ -33,4 +34,5 @@ export const trainingPlans = sqliteTable("training_plans", {
   name: text("name").notNull().default("My training split"),
   days: text("days").notNull(),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  profileId: integer("profile_id").notNull().default(1),
 });
