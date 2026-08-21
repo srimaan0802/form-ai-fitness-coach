@@ -26,3 +26,11 @@ export const profiles = sqliteTable("profiles", {
   weeklyDays: integer("weekly_days").notNull().default(4),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
+
+export const trainingPlans = sqliteTable("training_plans", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  planKey: text("plan_key").notNull().unique().default("primary"),
+  name: text("name").notNull().default("My training split"),
+  days: text("days").notNull(),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
