@@ -1,0 +1,10 @@
+{
+  "name": "FORM AI Fitness Coach",
+  "short_name": "FORM AI",
+  "description": "Track workouts, sets, reps and weights with smart coaching.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7ff",
+  "theme_color": "#111827",
+  "icons": [{"src":"/favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
